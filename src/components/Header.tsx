@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useWallet } from '@/hooks/use-wallet';
+import { toast } from '@/hooks/use-toast';
 
 const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -18,6 +19,31 @@ const Header: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [scrolled]);
+
+  const handleConnectWallet = async () => {
+    try {
+      await connect();
+      toast({
+        title: "Wallet Connected",
+        description: "Your wallet has been successfully connected.",
+      });
+    } catch (error) {
+      console.error("Wallet connection error:", error);
+      toast({
+        title: "Connection Failed",
+        description: "Please make sure you have MetaMask installed and unlocked.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDisconnect = () => {
+    disconnect();
+    toast({
+      title: "Wallet Disconnected",
+      description: "Your wallet has been disconnected.",
+    });
+  };
 
   return (
     <header 
@@ -52,7 +78,7 @@ const Header: React.FC = () => {
         
         {!isConnected ? (
           <button 
-            onClick={connect}
+            onClick={handleConnectWallet}
             className="text-sm font-medium bg-primary/10 text-primary px-4 py-2 rounded-full hover:bg-primary/20 transition-colors"
           >
             Connect Wallet
@@ -63,7 +89,7 @@ const Header: React.FC = () => {
               {account?.slice(0, 6)}...{account?.slice(-4)}
             </span>
             <button 
-              onClick={disconnect}
+              onClick={handleDisconnect}
               className="text-sm font-medium bg-secondary/70 text-foreground/80 px-4 py-2 rounded-full hover:bg-secondary transition-colors"
             >
               Disconnect

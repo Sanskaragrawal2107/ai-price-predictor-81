@@ -15,6 +15,9 @@ export function useNFTPredictions() {
       queryKey: ['nftSearch', query, blockchain],
       queryFn: () => searchNFTs({ query, blockchain }),
       enabled: query.length > 1, // Only search if query is at least 2 chars
+      staleTime: 1000 * 60 * 5, // Cache for 5 minutes
+      refetchOnWindowFocus: false,
+      retry: 2,
     });
   };
 
@@ -23,6 +26,7 @@ export function useNFTPredictions() {
     return useQuery({
       queryKey: ['nftPredictions'],
       queryFn: () => getNFTPredictions(),
+      refetchOnWindowFocus: false,
     });
   };
 

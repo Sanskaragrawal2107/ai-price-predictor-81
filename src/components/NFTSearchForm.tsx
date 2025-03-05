@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNFTPredictions } from '@/hooks/use-nft-predictions';
 import { TimeFrame } from '@/lib/types';
 import { timeframes } from '@/lib/mockData';
+import { toast } from '@/hooks/use-toast';
 
 const NFTSearchForm: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -10,11 +11,22 @@ const NFTSearchForm: React.FC = () => {
   const [selectedTimeframe, setSelectedTimeframe] = useState<TimeFrame>("30d");
   const { searchNFTsQuery, selectedNFT, setSelectedNFT, createNFTPrediction } = useNFTPredictions();
   
-  const { data: searchResults, isLoading: isSearching } = searchNFTsQuery(searchQuery, searchBlockchain);
+  // Only run the query when we have a search query
+  const { data: searchResults, isLoading: isSearching, error } = searchNFTsQuery(searchQuery, searchBlockchain);
   const { mutate: generatePrediction, isPending: isGenerating } = createNFTPrediction();
   
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    if (searchQuery.length < 2) {
+      toast({
+        title: "Search query too short",
+        description: "Please enter at least 2 characters to search",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    console.log("Searching for NFTs with query:", searchQuery);
     // The search is already being performed by the query hook
   };
   
@@ -86,7 +98,13 @@ const NFTSearchForm: React.FC = () => {
       </div>
       
       {/* Search Results */}
-      {searchResults && searchResults.length > 0 && (
+      {error && (
+        <div className="bg-red-50 text-red-700 p-4 rounded-lg mb-4">
+          Error: {error instanceof Error ? error.message : 'Unknown error occurred'}
+        </div>
+      )}
+      
+      {searchResults && searchResults.length > 0 ? (
         <div className="glass rounded-2xl p-8 shadow-sm">
           <h3 className="text-xl font-medium mb-4">Search Results</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -126,6 +144,16 @@ const NFTSearchForm: React.FC = () => {
               </div>
             ))}
           </div>
+        </div>
+      ) : searchQuery.length >= 2 && !isSearching && searchResults && (
+        <div className="glass rounded-2xl p-8 shadow-sm text-center">
+          <svg className="w-16 h-16 mx-auto text-foreground/30 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+          <h3 className="text-xl font-medium mb-2">No NFTs Found</h3>
+          <p className="text-foreground/70">
+            Try a different search term or blockchain filter.
+          </p>
         </div>
       )}
       

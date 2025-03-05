@@ -1,4 +1,3 @@
-
 import { NFT, NFTSearchRequest, NFTPrediction, TimeFrame } from './types';
 import { USE_MOCK_DATA } from './env';
 import { GEMINI_API_KEY } from './env';
@@ -96,40 +95,25 @@ const mockNFTPredictions: NFTPrediction[] = [];
  * Search for NFTs matching a query
  */
 export async function searchNFTs(request: NFTSearchRequest): Promise<NFT[]> {
-  // In a real app, this would call an API like OpenSea, Blur, or Magic Eden
-  if (USE_MOCK_DATA) {
-    console.log('Using mock data for NFT search');
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const filteredNFTs = mockNFTs.filter(nft => {
-          const matchesQuery = nft.name.toLowerCase().includes(request.query.toLowerCase()) || 
-                              nft.collection.toLowerCase().includes(request.query.toLowerCase());
-          
-          const matchesBlockchain = !request.blockchain || 
-                                  nft.blockchain.toLowerCase() === request.blockchain.toLowerCase();
-          
-          return matchesQuery && matchesBlockchain;
-        });
-        
-        resolve(filteredNFTs);
-      }, 500); // Simulate API delay
-    });
-  }
+  console.log('Searching NFTs with query:', request.query, 'and blockchain:', request.blockchain);
   
-  // For now, even in real mode, we'll use mock data since we don't have a real NFT API
-  console.log('Using mock data for NFT search (real APIs would be integrated here)');
+  // Always use mock data until we have a real API to connect to
   return new Promise((resolve) => {
     setTimeout(() => {
+      // Make a case-insensitive search to match more effectively
+      const query = request.query.toLowerCase();
+      
       const filteredNFTs = mockNFTs.filter(nft => {
-        const matchesQuery = nft.name.toLowerCase().includes(request.query.toLowerCase()) || 
-                            nft.collection.toLowerCase().includes(request.query.toLowerCase());
+        const matchesQuery = nft.name.toLowerCase().includes(query) || 
+                           nft.collection.toLowerCase().includes(query);
         
         const matchesBlockchain = !request.blockchain || 
-                                nft.blockchain.toLowerCase() === request.blockchain.toLowerCase();
+                               nft.blockchain.toLowerCase() === request.blockchain.toLowerCase();
         
         return matchesQuery && matchesBlockchain;
       });
       
+      console.log(`Found ${filteredNFTs.length} NFTs matching query:`, filteredNFTs);
       resolve(filteredNFTs);
     }, 500); // Simulate API delay
   });

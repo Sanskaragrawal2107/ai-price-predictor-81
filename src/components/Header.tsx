@@ -1,102 +1,60 @@
 
-import React, { useState, useEffect } from 'react';
-import { cn } from '@/lib/utils';
-import { useWallet } from '@/hooks/use-wallet';
-import { toast } from '@/hooks/use-toast';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
+import { useMobile } from '@/hooks/use-mobile';
+import NavLinks from '@/components/NavLinks';
 
-const Header: React.FC = () => {
-  const [scrolled, setScrolled] = useState(false);
-  const { connect, disconnect, isConnected, account, chainId } = useWallet();
-  
-  useEffect(() => {
-    const handleScroll = () => {
-      const isScrolled = window.scrollY > 10;
-      if (isScrolled !== scrolled) {
-        setScrolled(isScrolled);
-      }
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [scrolled]);
+const Header = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const isMobile = useMobile();
 
-  const handleConnectWallet = async () => {
-    try {
-      await connect();
-      toast({
-        title: "Wallet Connected",
-        description: "Your wallet has been successfully connected.",
-      });
-    } catch (error) {
-      console.error("Wallet connection error:", error);
-      toast({
-        title: "Connection Failed",
-        description: "Please make sure you have MetaMask installed and unlocked.",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const handleDisconnect = () => {
-    disconnect();
-    toast({
-      title: "Wallet Disconnected",
-      description: "Your wallet has been disconnected.",
-    });
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
   };
 
   return (
-    <header 
-      className={cn(
-        "fixed top-0 left-0 right-0 z-50 py-4 px-6 transition-all duration-300 ease-in-out",
-        scrolled 
-          ? "glass border-b border-gray-100" 
-          : "bg-transparent"
-      )}
-    >
-      <div className="container mx-auto flex items-center justify-between">
-        <div className="flex items-center space-x-1">
-          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-            <span className="text-white font-medium">AP</span>
-          </div>
-          <h1 className="text-lg font-medium">
-            AI Price <span className="font-light">Predictor</span>
-          </h1>
-        </div>
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+        <Link to="/" className="flex items-center space-x-2">
+          <span className="font-bold text-xl">AI<span className="text-primary">Chain</span></span>
+        </Link>
         
-        <nav className="hidden md:flex space-x-6">
-          <a href="#predictions" className="text-sm text-foreground/80 hover:text-foreground transition-colors">
-            Predictions
-          </a>
-          <a href="#verification" className="text-sm text-foreground/80 hover:text-foreground transition-colors">
-            Verification
-          </a>
-          <a href="#about" className="text-sm text-foreground/80 hover:text-foreground transition-colors">
-            About
-          </a>
-        </nav>
+        {/* Desktop Navigation */}
+        <NavLinks />
         
-        {!isConnected ? (
+        {/* Mobile Menu Button */}
+        {isMobile && (
           <button 
-            onClick={handleConnectWallet}
-            className="text-sm font-medium bg-primary/10 text-primary px-4 py-2 rounded-full hover:bg-primary/20 transition-colors"
+            onClick={toggleMobileMenu}
+            className="p-2 rounded-lg hover:bg-secondary/70 transition-colors"
           >
-            Connect Wallet
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
-        ) : (
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-foreground/70 hidden sm:inline">
-              {account?.slice(0, 6)}...{account?.slice(-4)}
-            </span>
-            <button 
-              onClick={handleDisconnect}
-              className="text-sm font-medium bg-secondary/70 text-foreground/80 px-4 py-2 rounded-full hover:bg-secondary transition-colors"
-            >
-              Disconnect
-            </button>
-          </div>
         )}
       </div>
+      
+      {/* Mobile Menu */}
+      {isMobile && mobileMenuOpen && (
+        <div className="bg-background border-b border-border">
+          <div className="container mx-auto px-4 py-4 flex flex-col space-y-2">
+            <Link 
+              to="/" 
+              className="py-2 px-3 font-medium hover:bg-secondary/80 rounded-lg transition-colors"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Home
+            </Link>
+            <Link 
+              to="/nft-predictions" 
+              className="py-2 px-3 font-medium hover:bg-secondary/80 rounded-lg transition-colors"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              NFT Predictions
+            </Link>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

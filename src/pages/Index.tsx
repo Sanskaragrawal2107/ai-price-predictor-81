@@ -4,6 +4,7 @@ import Layout from '@/components/Layout';
 import PredictionForm from '@/components/PredictionForm';
 import PredictionHistory from '@/components/PredictionHistory';
 import VerificationPanel from '@/components/VerificationPanel';
+import { Link } from 'react-router-dom';
 
 const Index = () => {
   return (
@@ -28,9 +29,9 @@ const Index = () => {
               <a href="#request" className="px-8 py-3 bg-primary text-white rounded-xl font-medium shadow-sm hover:bg-primary/90 transition-colors">
                 Get a Prediction
               </a>
-              <a href="#verification" className="px-8 py-3 bg-secondary text-foreground/80 rounded-xl font-medium hover:bg-secondary/70 transition-colors">
-                Verify Predictions
-              </a>
+              <Link to="/nft-predictions" className="px-8 py-3 bg-secondary text-foreground/80 rounded-xl font-medium hover:bg-secondary/70 transition-colors">
+                NFT Predictions
+              </Link>
             </div>
           </div>
         </section>
@@ -213,9 +214,9 @@ const Index = () => {
               <a href="#request" className="px-8 py-4 bg-primary text-white rounded-xl font-medium shadow-sm hover:bg-primary/90 transition-colors">
                 Get Your First Prediction
               </a>
-              <a href="#" className="px-8 py-4 bg-white/90 text-foreground rounded-xl font-medium hover:bg-white transition-colors">
-                Explore Documentation
-              </a>
+              <Link to="/nft-predictions" className="px-8 py-4 bg-white/90 text-foreground rounded-xl font-medium hover:bg-white transition-colors">
+                Try NFT Predictions
+              </Link>
             </div>
           </div>
         </section>

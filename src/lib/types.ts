@@ -49,3 +49,43 @@ export interface VerificationResult {
   originalPrediction: number;
   message: string;
 }
+
+// NFT Related Types
+export interface NFT {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  collection: string;
+  floorPrice?: number;
+  lastSalePrice?: number;
+  traits?: NFTTrait[];
+  blockchain: string;
+  tokenId: string;
+}
+
+export interface NFTTrait {
+  trait_type: string;
+  value: string;
+}
+
+export interface NFTPrediction {
+  id: string;
+  nftId: string;
+  nftName: string;
+  nftImage: string;
+  collection: string;
+  currentFloorPrice: number;
+  predictedFloorPrice: number;
+  percentageChange: number;
+  confidence: number;
+  timestamp: string;
+  timeframe: TimeFrame;
+  predictionRationale: string;
+  status: PredictionStatus;
+}
+
+export interface NFTSearchRequest {
+  query: string;
+  blockchain?: string;
+}

@@ -1,9 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { useWallet } from '@/hooks/use-wallet';
 
 const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
+  const { connect, disconnect, isConnected, account, chainId } = useWallet();
   
   useEffect(() => {
     const handleScroll = () => {
@@ -48,9 +50,26 @@ const Header: React.FC = () => {
           </a>
         </nav>
         
-        <button className="text-sm font-medium bg-primary/10 text-primary px-4 py-2 rounded-full hover:bg-primary/20 transition-colors">
-          Connect Wallet
-        </button>
+        {!isConnected ? (
+          <button 
+            onClick={connect}
+            className="text-sm font-medium bg-primary/10 text-primary px-4 py-2 rounded-full hover:bg-primary/20 transition-colors"
+          >
+            Connect Wallet
+          </button>
+        ) : (
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-foreground/70 hidden sm:inline">
+              {account?.slice(0, 6)}...{account?.slice(-4)}
+            </span>
+            <button 
+              onClick={disconnect}
+              className="text-sm font-medium bg-secondary/70 text-foreground/80 px-4 py-2 rounded-full hover:bg-secondary transition-colors"
+            >
+              Disconnect
+            </button>
+          </div>
+        )}
       </div>
     </header>
   );

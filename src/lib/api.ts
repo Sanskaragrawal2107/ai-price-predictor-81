@@ -14,10 +14,12 @@ import {
 export async function requestPrediction(request: PredictionRequest): Promise<Prediction> {
   // Use mock data if specified in environment variables
   if (USE_MOCK_DATA) {
+    console.log('Using mock data for prediction request');
     return mockRequestPrediction(request);
   }
   
   try {
+    console.log(`Requesting prediction from ${API_URL}/predictions`);
     const response = await fetch(`${API_URL}/predictions`, {
       method: 'POST',
       headers: {
@@ -27,6 +29,8 @@ export async function requestPrediction(request: PredictionRequest): Promise<Pre
     });
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`Error requesting prediction: ${response.status} ${response.statusText}`, errorText);
       throw new Error(`Error requesting prediction: ${response.statusText}`);
     }
 
@@ -46,13 +50,17 @@ export async function requestPrediction(request: PredictionRequest): Promise<Pre
 export async function fetchPredictions(): Promise<Prediction[]> {
   // Use mock data if specified in environment variables
   if (USE_MOCK_DATA) {
+    console.log('Using mock data for fetching predictions');
     return mockFetchPredictions();
   }
   
   try {
+    console.log(`Fetching predictions from ${API_URL}/predictions`);
     const response = await fetch(`${API_URL}/predictions`);
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`Error fetching predictions: ${response.status} ${response.statusText}`, errorText);
       throw new Error(`Error fetching predictions: ${response.statusText}`);
     }
 

@@ -1,69 +1,146 @@
-# Welcome to your Lovable project
+AI Prediction Oracle for Crypto Prices
 
-## Project info
+Overview
 
-**URL**: https://lovable.dev/projects/787e900f-4839-4e69-aa65-27bf5cb8f709
+AI Prediction Oracle is a decentralized application (dApp) that leverages AI to provide cryptocurrency price predictions recorded on-chain for transparency. The system integrates a smart contract, an AI model, and a frontend interface to allow users to request and verify price forecasts.
 
-## How can I edit this code?
+Features
 
-There are several ways of editing your application.
+AI-generated cryptocurrency price predictions
 
-**Use Lovable**
+Blockchain-based storage for transparency and immutability
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/787e900f-4839-4e69-aa65-27bf5cb8f709) and start prompting.
+Smart contract integration for secure and verifiable transactions
 
-Changes made via Lovable will be committed automatically to this repo.
+User-friendly frontend for accessing and requesting predictions
 
-**Use your preferred IDE**
+API-based AI model integration for real-time forecasts
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Tech Stack
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Frontend:
 
-Follow these steps:
+React.js / Next.js (for UI)
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+Tailwind CSS (for styling)
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Web3.js / ethers.js (for blockchain interaction)
 
-# Step 3: Install the necessary dependencies.
-npm i
+MetaMask (for wallet connection)
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+Backend:
 
-**Edit a file directly in GitHub**
+Node.js / Express.js (for API server)
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Python / Flask (for AI model integration)
 
-**Use GitHub Codespaces**
+Blockchain:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Solidity (for smart contract development)
 
-## What technologies are used for this project?
+Ethereum / Polygon (EVM-compatible blockchain)
 
-This project is built with .
+Hardhat / Truffle (for contract deployment and testing)
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+AI Model:
 
-## How can I deploy this project?
+TensorFlow / PyTorch (for model training and inference)
 
-Simply open [Lovable](https://lovable.dev/projects/787e900f-4839-4e69-aa65-27bf5cb8f709) and click on Share -> Publish.
+Gemini API (for AI predictions)
 
-## I want to use a custom domain - is that possible?
+CoinGecko API (for real-time cryptocurrency data)
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+Setup Guide
+
+1. Clone the Repository
+
+Clone the project repository from GitHub and navigate to the project directory.
+
+2. Install Dependencies
+
+Install the necessary dependencies for both the frontend and backend.
+
+3. Set Up Environment Variables
+
+Create a .env file in both frontend/ and backend/ directories and configure the required API keys and settings.
+
+Required API Keys
+
+1. Gemini API Key
+
+Used for fetching cryptocurrency price predictions from the AI model.
+
+2. CoinGecko API Key
+
+Used for retrieving real-time cryptocurrency market data.
+
+3. Blockchain Provider API Key
+
+Used to connect to Ethereum or other EVM-compatible networks for smart contract interaction.
+
+4. Wallet Private Key
+
+Used for signing transactions to deploy and update the smart contract securely.
+
+Smart Contract Deployment
+
+1. Install Hardhat & Dependencies
+
+Set up Hardhat and required dependencies for smart contract development and deployment.
+
+2. Compile & Deploy Smart Contract
+
+Compile and deploy the smart contract to an EVM-compatible blockchain.
+
+Backend Setup
+
+1. Start Backend Server
+
+Run the backend server to handle AI predictions and blockchain interactions.
+
+2. API Endpoints
+
+Define API endpoints for fetching AI predictions and updating blockchain records.
+
+Frontend Setup
+
+1. Run Frontend
+
+Start the frontend application to provide a user-friendly interface for requesting predictions and viewing results.
+
+2. Features
+
+Users can request price predictions.
+
+Display of past AI predictions stored on-chain.
+
+Web3 integration for smart contract interaction.
+
+MetaMask wallet connection for transactions.
+
+Deployment
+
+1. Backend Deployment
+
+Deploy the backend server to a cloud service like Vercel, AWS, or Render.
+
+2. Smart Contract Deployment
+
+Deploy the smart contract to Ethereum, Polygon, or another supported blockchain.
+
+3. Frontend Deployment
+
+Deploy the frontend application to a hosting platform like Vercel or Netlify.
+
+Future Improvements
+
+Multi-chain support for different blockchains.
+
+Advanced AI models for improved predictions.
+
+User authentication and prediction history.
+
+Subscription-based premium AI insights.
+
+
+

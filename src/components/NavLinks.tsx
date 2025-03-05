@@ -8,8 +8,8 @@ const NavLinks = () => {
     <div className="hidden md:flex items-center space-x-6">
       {navLinks.map((link) => (
         <NavLink
-          key={link.path}
-          to={link.path}
+          key={link.href}
+          to={link.href}
           className={({ isActive }) =>
             isActive
               ? "py-2 px-3 font-medium bg-primary/10 text-primary rounded-lg"

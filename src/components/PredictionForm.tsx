@@ -2,31 +2,24 @@
 import React, { useState } from 'react';
 import { cryptocurrencies, timeframes } from '@/lib/mockData';
 import { PredictionRequest, CryptoCurrency, TimeFrame } from '@/lib/types';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '@/hooks/use-toast';
+import { usePredictions } from '@/hooks/use-predictions';
 
 const PredictionForm: React.FC = () => {
   const [selectedCrypto, setSelectedCrypto] = useState<CryptoCurrency>("BTC");
   const [selectedTimeframe, setSelectedTimeframe] = useState<TimeFrame>("30d");
-  const [isLoading, setIsLoading] = useState(false);
+  const { createPrediction } = usePredictions();
+  const { mutate, isPending } = createPrediction();
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
     
     const request: PredictionRequest = {
       cryptoId: selectedCrypto,
       timeframe: selectedTimeframe
     };
     
-    // Simulate API call
-    setTimeout(() => {
-      console.log('Prediction requested:', request);
-      setIsLoading(false);
-      toast({
-        title: "Prediction Requested",
-        description: `Your ${selectedCrypto} prediction for ${selectedTimeframe} has been requested.`,
-      });
-    }, 1200);
+    mutate(request);
   };
   
   return (
@@ -84,10 +77,10 @@ const PredictionForm: React.FC = () => {
         
         <button
           type="submit"
-          disabled={isLoading}
+          disabled={isPending}
           className="w-full bg-primary text-white py-3 rounded-xl font-medium shadow-sm hover:bg-primary/90 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
         >
-          {isLoading ? (
+          {isPending ? (
             <span className="flex items-center justify-center">
               <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>

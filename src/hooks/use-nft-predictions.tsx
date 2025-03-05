@@ -10,11 +10,11 @@ export function useNFTPredictions() {
   const queryClient = useQueryClient();
 
   // Search NFTs
-  const searchNFTsQuery = (query: string, blockchain?: string) => {
+  const searchNFTsQuery = (query: string, blockchain?: string, enabled = false) => {
     return useQuery({
       queryKey: ['nftSearch', query, blockchain],
       queryFn: () => searchNFTs({ query, blockchain }),
-      enabled: query.length > 1, // Only search if query is at least 2 chars
+      enabled: query.length > 1 && enabled, // Only search if query is at least 2 chars and search is triggered
       staleTime: 1000 * 60 * 5, // Cache for 5 minutes
       refetchOnWindowFocus: false,
       retry: 2,

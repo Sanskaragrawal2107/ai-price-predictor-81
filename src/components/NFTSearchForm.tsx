@@ -9,10 +9,11 @@ const NFTSearchForm: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchBlockchain, setSearchBlockchain] = useState<string | undefined>();
   const [selectedTimeframe, setSelectedTimeframe] = useState<TimeFrame>("30d");
+  const [isSearchClicked, setIsSearchClicked] = useState(false);
   const { searchNFTsQuery, selectedNFT, setSelectedNFT, createNFTPrediction } = useNFTPredictions();
   
-  // Only run the query when we have a search query
-  const { data: searchResults, isLoading: isSearching, error } = searchNFTsQuery(searchQuery, searchBlockchain);
+  // Only run the query when we have a search query and the search button has been clicked
+  const { data: searchResults, isLoading: isSearching, error } = searchNFTsQuery(searchQuery, searchBlockchain, isSearchClicked);
   const { mutate: generatePrediction, isPending: isGenerating } = createNFTPrediction();
   
   const handleSearch = (e: React.FormEvent) => {
@@ -27,7 +28,8 @@ const NFTSearchForm: React.FC = () => {
     }
     
     console.log("Searching for NFTs with query:", searchQuery);
-    // The search is already being performed by the query hook
+    setIsSearchClicked(true);
+    // The search is performed by the query hook
   };
   
   const handleGeneratePrediction = () => {

@@ -22,6 +22,7 @@ export async function requestPrediction(request: PredictionRequest): Promise<Pre
       
       // 1. Fetch current price from CoinGecko
       const currentPrice = await fetchCurrentPrice(request.cryptoId);
+      console.log(`Fetched current price for ${request.cryptoId}: $${currentPrice}`);
       
       // 2. Get cryptocurrency full name
       const cryptoNames: Record<CryptoCurrency, string> = {
@@ -43,6 +44,7 @@ export async function requestPrediction(request: PredictionRequest): Promise<Pre
         currentPrice,
         request.timeframe
       );
+      console.log(`Generated prediction for ${request.cryptoId}: $${predictedPrice} with ${confidence}% confidence`);
       
       // 4. Calculate percentage change
       const percentageChange = ((predictedPrice - currentPrice) / currentPrice) * 100;
@@ -58,7 +60,7 @@ export async function requestPrediction(request: PredictionRequest): Promise<Pre
         confidence,
         timestamp: new Date().toISOString(),
         timeframe: request.timeframe,
-        status: "completed", // Change from "pending" to "completed" immediately
+        status: "completed", // Set as completed immediately
         verificationHash: `hash-${Date.now()}-${Math.floor(Math.random() * 1000000)}`
       };
       

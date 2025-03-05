@@ -32,12 +32,16 @@ export async function fetchCurrentPrice(cryptoId: CryptoCurrency): Promise<numbe
     const response = await fetch(url);
     
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`CoinGecko API error: ${response.status} ${response.statusText}`, errorText);
       throw new Error(`CoinGecko API error: ${response.status} ${response.statusText}`);
     }
     
     const data = await response.json();
+    console.log(`CoinGecko response for ${cryptoId}:`, data);
     
     if (!data[geckoId] || typeof data[geckoId].usd !== 'number') {
+      console.error(`Invalid response from CoinGecko for ${cryptoId}:`, data);
       throw new Error(`Invalid response from CoinGecko for ${cryptoId}`);
     }
     
@@ -62,14 +66,20 @@ export async function fetchHistoricalPrices(
     }
 
     const url = `https://api.coingecko.com/api/v3/coins/${geckoId}/market_chart?vs_currency=usd&days=${days}&x_cg_demo_api_key=${COINGECKO_API_KEY}`;
+    console.log(`Fetching historical prices from CoinGecko: ${url}`);
     
     const response = await fetch(url);
     
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`CoinGecko historical API error: ${response.status} ${response.statusText}`, errorText);
       throw new Error(`CoinGecko API error: ${response.status} ${response.statusText}`);
     }
     
-    return await response.json();
+    const data = await response.json();
+    console.log(`CoinGecko historical data for ${cryptoId}:`, data);
+    
+    return data;
   } catch (error) {
     console.error(`Error fetching historical prices for ${cryptoId}:`, error);
     throw error;

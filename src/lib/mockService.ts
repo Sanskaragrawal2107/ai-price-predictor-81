@@ -35,7 +35,7 @@ export async function mockRequestPrediction(request: PredictionRequest): Promise
     confidence: Math.floor(65 + Math.random() * 25), // Random confidence between 65-90%
     timestamp: new Date().toISOString(),
     timeframe: request.timeframe,
-    status: "completed", // Change from "pending" to "completed" immediately
+    status: "completed", // Set to "completed" immediately
     verificationHash: `hash-${Date.now()}-${Math.floor(Math.random() * 1000000)}`
   };
   

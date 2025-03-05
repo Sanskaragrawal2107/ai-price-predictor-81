@@ -38,7 +38,8 @@ export async function generatePricePrediction(
       Format your response as valid JSON with no additional text or explanation.
     `;
 
-    // Updated endpoint to use gemini-1.5-flash instead of gemini-pro
+    console.log(`Sending prediction request to Gemini for ${cryptoId} at $${currentPrice} for ${days} days`);
+
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
       method: 'POST',
       headers: {
@@ -55,28 +56,36 @@ export async function generatePricePrediction(
 
     if (!response.ok) {
       const errorText = await response.text();
+      console.error(`Gemini API error: ${response.status}`, errorText);
       throw new Error(`Gemini API error: ${response.status} ${errorText}`);
     }
 
     const data = await response.json();
+    console.log('Gemini API response:', data);
     
     // Extract the relevant part from Gemini's response
     const textResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
     
     if (!textResponse) {
+      console.error('Invalid or empty response from Gemini API:', data);
       throw new Error('Invalid or empty response from Gemini API');
     }
+
+    console.log('Gemini text response:', textResponse);
 
     // Parse JSON from the response text
     // Find JSON object in the response if it's not pure JSON
     const jsonMatch = textResponse.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
+      console.error('Could not find valid JSON in Gemini response:', textResponse);
       throw new Error('Could not find valid JSON in Gemini response');
     }
     
     const predictionData = JSON.parse(jsonMatch[0]);
+    console.log('Parsed prediction data:', predictionData);
     
     if (typeof predictionData.predictedPrice !== 'number' || typeof predictionData.confidence !== 'number') {
+      console.error('Invalid prediction data format from Gemini:', predictionData);
       throw new Error('Invalid prediction data format from Gemini');
     }
 
@@ -91,6 +100,8 @@ export async function generatePricePrediction(
     const changePercent = -5 + Math.random() * 10; // Random change between -5% and +5%
     const predictedPrice = parseFloat((currentPrice * (1 + changePercent / 100)).toFixed(2));
     const confidence = Math.floor(65 + Math.random() * 25); // Random confidence between 65-90%
+    
+    console.warn('Falling back to generated prediction:', { predictedPrice, confidence });
     
     return {
       predictedPrice,

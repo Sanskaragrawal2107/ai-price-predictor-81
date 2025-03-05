@@ -3,6 +3,7 @@ import React from 'react';
 import Layout from '@/components/Layout';
 import NFTSearchForm from '@/components/NFTSearchForm';
 import NFTPredictionHistory from '@/components/NFTPredictionHistory';
+import HomeButton from '@/components/HomeButton';
 
 const NFTPredictions = () => {
   return (
@@ -22,6 +23,9 @@ const NFTPredictions = () => {
             <p className="text-xl text-foreground/70 max-w-2xl mx-auto">
               Discover the future value of NFT collections with our AI-powered floor price prediction engine.
             </p>
+            <div className="flex justify-center">
+              <HomeButton />
+            </div>
           </div>
         </section>
         

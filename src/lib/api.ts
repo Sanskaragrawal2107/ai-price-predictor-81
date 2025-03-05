@@ -1,10 +1,12 @@
+
 import { CryptoCurrency, TimeFrame, Prediction, PredictionRequest, VerificationResult } from './types';
 import { API_URL, USE_MOCK_DATA } from './env';
 import { 
   mockRequestPrediction, 
   mockFetchPredictions, 
   mockFetchPredictionById, 
-  mockVerifyPrediction 
+  mockVerifyPrediction,
+  mockPredictions
 } from './mockService';
 import { fetchCurrentPrice } from './coingeckoService';
 import { generatePricePrediction } from './geminiService';
@@ -56,7 +58,7 @@ export async function requestPrediction(request: PredictionRequest): Promise<Pre
         confidence,
         timestamp: new Date().toISOString(),
         timeframe: request.timeframe,
-        status: "pending",
+        status: "completed", // Change from "pending" to "completed" immediately
         verificationHash: `hash-${Date.now()}-${Math.floor(Math.random() * 1000000)}`
       };
       

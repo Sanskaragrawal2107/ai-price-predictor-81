@@ -1,6 +1,9 @@
 
-import { mockPredictions } from './mockData';
+import { mockPredictions as initialMockPredictions } from './mockData';
 import { PredictionRequest, Prediction, VerificationResult } from './types';
+
+// Create a mutable copy of the mock predictions that we can modify
+export const mockPredictions: Prediction[] = [...initialMockPredictions];
 
 // Simulate API latency
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -14,25 +17,29 @@ export async function mockRequestPrediction(request: PredictionRequest): Promise
   
   const crypto = mockPredictions.find(p => p.cryptoId === request.cryptoId) || mockPredictions[0];
   
+  // Use more realistic price range based on the crypto's current price
+  const currentPrice = crypto.currentPrice * (0.98 + Math.random() * 0.04); // Random price variation of ±2%
+  
+  // Calculate a more realistic prediction
+  const changePercent = -5 + Math.random() * 10; // Random change between -5% and +5%
+  const predictedPrice = parseFloat((currentPrice * (1 + changePercent / 100)).toFixed(2));
+  const percentageChange = parseFloat(changePercent.toFixed(2));
+  
   const newPrediction: Prediction = {
     id: `pred-${Date.now()}`,
     cryptoId: request.cryptoId,
     cryptoName: crypto.cryptoName,
-    currentPrice: crypto.currentPrice * (0.9 + Math.random() * 0.2), // Random price variation
-    predictedPrice: 0,
-    percentageChange: 0,
+    currentPrice: parseFloat(currentPrice.toFixed(2)),
+    predictedPrice,
+    percentageChange,
     confidence: Math.floor(65 + Math.random() * 25), // Random confidence between 65-90%
     timestamp: new Date().toISOString(),
     timeframe: request.timeframe,
-    status: "pending"
+    status: "completed", // Change from "pending" to "completed" immediately
+    verificationHash: `hash-${Date.now()}-${Math.floor(Math.random() * 1000000)}`
   };
   
-  // Calculate predicted price and percentage change
-  const changePercent = -10 + Math.random() * 20; // Random change between -10% and +10%
-  newPrediction.percentageChange = parseFloat(changePercent.toFixed(2));
-  newPrediction.predictedPrice = parseFloat((newPrediction.currentPrice * (1 + changePercent / 100)).toFixed(2));
-  
-  // Add to mock predictions (in a real app, this would be stored in a database)
+  // Add to mock predictions
   mockPredictions.unshift(newPrediction);
   
   return newPrediction;
@@ -79,6 +86,11 @@ export async function mockVerifyPrediction(id: string, hash: string): Promise<Ve
   
   // In a real app, this would perform cryptographic verification
   const isVerified = prediction.verificationHash === hash;
+  
+  if (isVerified && prediction.status === "completed") {
+    // Update the prediction status to verified if it's verified successfully
+    prediction.status = "verified";
+  }
   
   return {
     isVerified,

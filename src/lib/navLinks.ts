@@ -1,14 +1,15 @@
 
-// This file exports navigation links data that can be used across the application
-// Add or modify links here to update navigation throughout the app
-
 export const navLinks = [
-  { 
-    path: '/',
-    label: 'Home'
+  {
+    label: "Home",
+    href: "/",
   },
   {
-    path: '/nft-predictions',
-    label: 'NFT Predictions'
-  }
+    label: "NFT Predictions",
+    href: "/nft-predictions",
+  },
+  {
+    label: "Deploy Contract",
+    href: "/deploy-contract",
+  },
 ];
